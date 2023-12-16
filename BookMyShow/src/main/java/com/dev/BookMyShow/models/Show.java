@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,12 +25,14 @@ public class Show extends BaseModel {
 	
 	private LocalDateTime endTime;
 	
+	@ManyToOne
 	private Screen screen;
 	
 	@Enumerated(EnumType.ORDINAL)
 	@ElementCollection
 	private List<Feature> features;
 	
+	@OneToMany
 	private List<ShowSeat> showSeats;
 
 }
