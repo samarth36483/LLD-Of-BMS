@@ -37,4 +37,60 @@ public class Ticket extends BaseModel {
 	@OneToMany
 	private List<Payment> payments;
 
+	public BookingStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(BookingStatus status) {
+		this.status = status;
+	}
+
+	public List<ShowSeat> getSeats() {
+		return seats;
+	}
+
+	public void setSeats(List<ShowSeat> seats) {
+		this.seats = seats;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public LocalDateTime getShowtime() {
+		return Showtime;
+	}
+
+	public void setShowtime(LocalDateTime showtime) {
+		Showtime = showtime;
+	}
+
+	public Show getShow() {
+		return show;
+	}
+
+	public void setShow(Show show) {
+		this.show = show;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+	public List<Payment> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(List<Payment> payments) {
+		this.payments = payments;
+	}
+
 }

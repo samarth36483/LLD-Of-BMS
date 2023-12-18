@@ -24,4 +24,36 @@ public class ShowSeat extends BaseModel {
 	
 	private double price;
 
+	public Show getShow() {
+		return show;
+	}
+
+	public void setShow(Show show) {
+		this.show = show;
+	}
+
+	public Seat getSeat() {
+		return seat;
+	}
+
+	public void setSeat(Seat seat) {
+		this.seat = seat;
+	}
+
+	public ShowSeatStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ShowSeatStatus status) {
+		this.status = status;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
 }
