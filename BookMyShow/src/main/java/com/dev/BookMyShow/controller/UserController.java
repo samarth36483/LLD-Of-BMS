@@ -1,12 +1,13 @@
 package com.dev.BookMyShow.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import com.dev.BookMyShow.dto.UserSignUpRequestDTO;
 import com.dev.BookMyShow.dto.UserSignUpResponseDTO;
 import com.dev.BookMyShow.models.User;
 import com.dev.BookMyShow.service.UserService;
-
+@Controller
 public class UserController {
 	@Autowired
 	private UserService userService; // interface
