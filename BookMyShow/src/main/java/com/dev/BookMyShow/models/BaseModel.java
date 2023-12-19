@@ -1,5 +1,6 @@
 package com.dev.BookMyShow.models;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -21,11 +22,11 @@ public class BaseModel {
 	
 	@LastModifiedDate
 	@Temporal(value = TemporalType.TIMESTAMP)
-	private Date updatedAt;
+	private LocalDateTime updatedAt;
 	
 	@CreatedDate
 	@Temporal(value = TemporalType.TIMESTAMP)
-	private Date createdAt;
+	private LocalDateTime createdAt;
 
 	public long getId() {
 		return id;
@@ -35,19 +36,19 @@ public class BaseModel {
 		this.id = id;
 	}
 
-	public Date getUpdatedAt() {
+	public LocalDateTime getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(Date updatedAt) {
+	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
-	public Date getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 

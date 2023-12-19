@@ -22,5 +22,37 @@ public class Payment extends BaseModel {
 	
 	@Enumerated(EnumType.ORDINAL)
 	private PaymentMode paymentMode;
+
+	public int getRefNo() {
+		return refNo;
+	}
+
+	public void setRefNo(int refNo) {
+		this.refNo = refNo;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+	public PaymentStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(PaymentStatus status) {
+		this.status = status;
+	}
+
+	public PaymentMode getPaymentMode() {
+		return paymentMode;
+	}
+
+	public void setPaymentMode(PaymentMode paymentMode) {
+		this.paymentMode = paymentMode;
+	}
 	
 }

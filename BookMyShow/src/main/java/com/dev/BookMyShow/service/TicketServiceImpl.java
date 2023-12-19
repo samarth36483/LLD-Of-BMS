@@ -1,13 +1,20 @@
 package com.dev.BookMyShow.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.dev.BookMyShow.exception.ShowSeatNotAvailableException;
 import com.dev.BookMyShow.exception.TicketNotFoundException;
 import com.dev.BookMyShow.exception.UserNotFoundException;
+import com.dev.BookMyShow.models.Payment;
+import com.dev.BookMyShow.models.Show;
 import com.dev.BookMyShow.models.ShowSeat;
 import com.dev.BookMyShow.models.Ticket;
 import com.dev.BookMyShow.models.User;
@@ -29,9 +36,36 @@ public class TicketServiceImpl implements TicketService {
 	private ShowSeatRepository showSeatRepository;
 
 	@Override
+	@Transactional(isolation = Isolation.SERIALIZABLE)
 	public Ticket bookTicket(Long userId, List<Long> showSeatIds, Long showId) {
+		User bookedByUser = userRepository.findById(userId).get();
+		Show show = showRepository.findById(showId).get();
 		
-		return null;
+		for(Long seatId : showSeatIds) {
+			ShowSeat seat = showSeatRepository.findById(seatId).get();
+			if(seat.getStatus().equals(ShowSeatStatus.AVAILABLE)) {
+				seat.setStatus(ShowSeatStatus.LOCKED);
+				showSeatRepository.save(seat);
+			}
+			else {
+				throw new ShowSeatNotAvailableException("Selected seat is already booked");
+			}
+		}
+		
+		boolean paymentDone = paymentCheck();
+		double amount = 0;
+		List<ShowSeat> showSeats = new ArrayList<>();
+		if(paymentDone) {
+			for(Long seatId : showSeatIds) {
+				ShowSeat seat = showSeatRepository.findById(seatId).get();
+				seat.setStatus(ShowSeatStatus.BOOKED);
+				seat = showSeatRepository.save(seat);
+				showSeats.add(seat);
+				amount = amount + seat.getPrice();
+			}
+		}
+		
+		return ticketGenerator(bookedByUser, amount, showSeats, show);
 	}
 
 	@Override
@@ -49,7 +83,12 @@ public class TicketServiceImpl implements TicketService {
 			seat.setStatus(ShowSeatStatus.AVAILABLE);
 		}
 		
-		ticketRepository.save(ticket);
+		for(Payment p : ticket.getPayments()) {
+			int refNo = p.getRefNo();
+			// send refNo to 3rd party to process refund against it
+		}
+		
+		ticket = ticketRepository.save(ticket);
 		
 		return ticket;
 	}
@@ -84,6 +123,22 @@ public class TicketServiceImpl implements TicketService {
 		ticket.setUser(toUser);
 		
 		return ticketRepository.save(ticket);
+	}
+	
+	private boolean paymentCheck() {
+		return true;
+	}
+	
+	private Ticket ticketGenerator(User user, double amount, List<ShowSeat> seats, Show show) {
+		Ticket ticket = new Ticket();
+		ticket.setAmount(amount);
+		ticket.setCreatedAt(LocalDateTime.now());
+		ticket.setSeats(seats);
+		ticket.setShow(show);
+		ticket.setUser(user);
+		ticket.setStatus(BookingStatus.CONFIRMED);
+		ticket.setUpdatedAt(LocalDateTime.now());
+		return ticket;
 	}
 
 }
